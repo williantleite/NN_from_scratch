@@ -1,3 +1,4 @@
+import numpy as np
 def init_param(layer_dim):
     """
     Takes an input list with the dimensions of each layer in the network and returns a dictionary with parameters W and b.

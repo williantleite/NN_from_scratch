@@ -1,3 +1,5 @@
+import numpy as np
+from helper_functions import relu_backprop, sigmoid_backprop
 def back_prop(dZ,cache):
     """
     Takes dZ and cache, the gradient of the cost and the cached values to produce the Z element.
@@ -6,8 +8,11 @@ def back_prop(dZ,cache):
     A_prev,W,b=cache
     m=A_prev.shape[1]
     dW=(1/m)*np.dot(dZ,A_prev.T)
-    db=(1/m)*np.sum(dz,axis=1,keepdims=True)
+    db=(1/m)*np.sum(dZ,axis=1,keepdims=True)
     dA_prev=np.dot(W.T,dZ)
+    assert(dA_prev.shape==A_prev.shape)
+    assert(dW.shape==W.shape)
+    assert(db.shape==b.shape)
     return dA_prev,dW,db
 
 def back_activ(dA,cache,activ):
@@ -37,11 +42,11 @@ def deep_model_back(AV,Y,caches):
     Y=Y.reshape(AV.shape)
     dAL=-(np.divide(Y,AV)-np.divide(1-Y,1-AV)) #the derivative of the cost function I talked about in the preamble of this section
     present_cache=caches[L-1]
-    grads["dA"+str(l)],grads["dW"+str(l)],grads["db"+str(l)]=back_activ(dAL,present_cache,activ="sigmoid")
+    grads["dA"+str(L-1)],grads["dW"+str(L)],grads["db"+str(L)]=back_activ(dAL,present_cache,activ="sigmoid")
     for l in reversed(range(L-1)):
         present_cache=caches[l]
         dA_prev_temp,dW_temp,db_temp=back_activ(grads['dA'+str(l+1)],present_cache,activ='relu')
         grads['dA'+str(l)]=dA_prev_temp
         grads['dW'+str(l+1)]=dW_temp
         grads['db'+str(l+1)]=db_temp
-    return grads    
+    return grads
