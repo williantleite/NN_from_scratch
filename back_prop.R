@@ -1,0 +1,52 @@
+source("helper_functions.R")
+back_prop<-function(dZ,cache){
+    A_prev<-cache[1]
+    W<-cache[2]
+    b<-cache[3]
+    m<-dim(A_prev)[2]
+    dW<-(1/m)*(dZ%*%t(A_prev))
+    db<-(1/m)*sum(dZ)
+    dA_prev<-t(W)%*%dZ
+    return(list(dA_prev,dW,db))
+}
+back_activ<-function(dA,cache,activ){
+    for_cache<-cache[[1]]
+    activ_cache[[2]]
+    if (activ=='relu'){
+        dZ<-relu_backprop(dA,activ_cache)
+        calc<-back_prop(dZ,for_cache)
+        dA_prev<-calc[[1]]
+        dW<-calc[[2]]
+        db<-calc[[3]]
+    } else if (activ=='sigmoid'){
+        dZ<-sigmoid_backprop(dA,activ_cache)
+        calc<-back_prop(dZ,for_cache)
+        dA_prev<-calc[[1]]
+        dW<-calc[[2]]
+        db<-calc[[3]]
+    }
+    return(list(dA_prev,dW,db))
+}
+deep_model_back<-function(AV,Y,caches){
+    grads<-list()
+    L<-length(caches)
+    m<-dim(AV)[2]
+    Y<-matrix(Y, nrow=1, ncol=length(AV))
+    dAL=-(Y/AV)-((1-Y)/(1-AV))
+    present_cache<-caches[L-1]
+    calc<-back_activ(dAL,present_cache,activ='sigmoid')
+    grads[paste("dA",L-1,sep="")]<-calc[[1]]
+    grads[paste("dW",L,sep="")]<-calc[[2]]
+    grads[paste('db',L,sep="")]<-calc[[3]]
+    for (l in (L-1):1){
+        present_cache<-caches[l]
+        calcul<-back_activ(grads[paste("dA",l+1,sep="")],present_cache,activ='relu')
+        dA_prev_temp<-calcul[[1]]
+        dW_temp<-calcul[[2]]
+        db_temp<-calcul[[3]]
+        grads[paste('dA',l,sep="")]<-dA_prev_temp
+        grads[paste('dW',l,sep="")]<-dW_temp
+        grads[paste('db',l,sep="")]<-db_temp
+    }
+    return(grads)
+}

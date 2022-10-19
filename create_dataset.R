@@ -1,6 +1,4 @@
 library(imager)
-filenames_cat <- list.files("C:/Users/wtrindad/source/repos/NN_from_scratch/PetImages/Cat/", pattern="*.jpg", full.names=T)
-filenames_dog <- list.files("C:/Users/wtrindad/source/repos/NN_from_scratch/PetImages/Dog/", pattern="*.jpg", full.names=T)
 load <- function(im){
   skip_to_next<-FALSE
   tryCatch(load.image(im), error = function(e){skip_to_next<<-TRUE},
@@ -49,6 +47,3 @@ create_dataset<-function(filenames_cat,filenames_dog, labels=c(1,0),width,height
   labels<-append(cat_labels,dog_labels)
   return(list(dataset,labels))
 }
-img_data<-create_dataset(filenames_cat,filenames_dog,labels=c(1,0),width=32,height=32)
-dataset <- img_data[[1]]
-labels<-img_data[[2]]
