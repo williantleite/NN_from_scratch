@@ -1,6 +1,6 @@
 #one could potentially use the `sigmoid` library for the relu and sigmoid functions, but they are very simple to implement too.
 relu<-function(Z){
-    A<-max(0,Z)
+    A<-pmax(Z,0)
     cache<-Z
     return(list(A,cache))
 }

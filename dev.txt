@@ -1,0 +1,19 @@
+Z.shape = (1,35)
+dZ.shape = (1,35)
+s.shape = (1,35)
+dA.shape = (1,35)
+
+caches come from deep_model (list of 8, 
+				(py1)	[[1]] list of 3
+					[[2]] double[20xn]
+				(py2)	[[3]] list of 3
+					[[4]] double[7x34]
+				(py3)	[[5]] list of 3
+					[[6]] double[5x34]
+				(py4)	[[7]] list of 3
+					[[8]] double [1x34]
+they are fed into deep_model_back
+				
+dentro do deep_model_back o cache é posto no present_cache[]
+
+

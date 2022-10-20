@@ -15,10 +15,10 @@ def dense_nn(X,Y,layers_dims,learning_rate=0.0075,num_iterations=5000,print_cost
     for i in range(0,num_iterations):
         AV,caches=deep_model(X,parameters)
         cost=cost_computation(AV,Y)
-        grads=deep_model_back(AV,Y,caches)
+        grads,Z,dZ=deep_model_back(AV,Y,caches)
         parameters=update(parameters,grads,learning_rate)
         if print_cost and i%100==0 or i==num_iterations-1:
             print("Cost after iteration {}: {}".format(i,np.squeeze(cost)))
         if i%100==0 or i==num_iterations:
             costs.append(cost)
-    return parameters,costs
+    return parameters,costs,Z,dZ

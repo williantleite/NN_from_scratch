@@ -7,7 +7,7 @@ source("cost_computation.R")
 dense_nn<-function(X,Y,layers_dims,learning_rate=0.0075,num_iterations=5000,print_cost=False){
     costs<-list()
     parameters<-init_param(layers_dims)
-    for(i in 1:num_interations){
+    for(i in 1:num_iterations){
         calc<-deep_model(X,parameters)
         AV<-calc[[1]]
         caches<-calc[[2]]
