@@ -256,6 +256,6 @@ y_test<-labels[!samples]
 
 layer_dims<-c(dim(x_train)[1],20,7,5,1)
 
-short_run<-dense_nn(x_train,y_train,layer_dims,num_iterations=1,print_cost=T)
-parameters<-short_run[[1]]
-costs<-short_run[[2]]
+long_run<-dense_nn(x_train,y_train,layer_dims,learning_rate=0.3,num_iterations=150,print_cost=TRUE)
+parameters<-long_run[[1]]
+costs<-long_run[[2]]
