@@ -13,6 +13,6 @@ predict<-function(X,y,parameters){
             p[1,i]=0
         }
     }
-    print("Accuracy ", sum((p==y)/m))
+    print(paste("Accuracy ", sum((p==y)/m)))
     return(p)
 }

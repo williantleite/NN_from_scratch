@@ -14,7 +14,7 @@ dense_nn<-function(X,Y,layers_dims,learning_rate=0.0075,num_iterations=5000,prin
     grads<-deep_model_back(AV,Y,caches)
     parameters<-update(parameters,grads,learning_rate)
     if(print_cost && i%%100==0 | i==num_iterations-1){
-      print("Cost after iteration ",i,": ",cost)
+      print(paste("Cost after iteration ",i,": ",cost))
     }
     if(i%%100==0 | i==num_iterations){
       costs<-append(costs,cost)

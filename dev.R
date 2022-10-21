@@ -94,7 +94,7 @@ cost_computation<-function(AV,Y){
   m<-length(Y)
   cost=-(1/m)*sum(log(AV)%*%Y+log((1-AV))%*%(1-Y))
   cost<-unlist(cost)
-  return(cost)
+  return(cost) #need to check this, seems to be summing the costs?
 }
 
 
@@ -157,8 +157,8 @@ update<-function(params,grads,learning_rate){
   parameters<-params
   L<-length(parameters)%/%2
   for (l in 1:L){
-    parameters[[paste0("W",l+1)]]<-parameters[[paste0("W",l+1)]]-learning_rate*grads[[paste0('dW',l+1)]]
-    parameters[[paste0("b",l+1)]]<-parameters[[paste0("b",l+1)]]-learning_rate*grads[[paste0('db',l+1)]]
+    parameters[[paste0("W",l)]]<-parameters[[paste0("W",l)]]-learning_rate*grads[[paste0('dW',l)]]
+    parameters[[paste0("b",l)]]<-parameters[[paste0("b",l)]]-learning_rate*grads[[paste0('db',l)]]
   }
   return(parameters)
 }
@@ -229,7 +229,7 @@ dense_nn<-function(X,Y,layers_dims,learning_rate=0.0075,num_iterations=5000,prin
     grads<-deep_model_back(AV,Y,caches)
     parameters<-update(parameters,grads,learning_rate)
     if(print_cost && i%%100==0 | i==num_iterations-1){
-      print("Cost after iteration ",i,": ",cost)
+      print(paste("Cost after iteration ",i,": ",cost))
     }
     if(i%%100==0 | i==num_iterations){
       costs<-append(costs,cost)
@@ -256,6 +256,6 @@ y_test<-labels[!samples]
 
 layer_dims<-c(dim(x_train)[1],20,7,5,1)
 
-long_run<-dense_nn(x_train,y_train,layer_dims,learning_rate=0.3,num_iterations=150,print_cost=TRUE)
+long_run<-dense_nn(x_train,y_train,layer_dims,learning_rate=0.01,num_iterations=150,print_cost=TRUE)
 parameters<-long_run[[1]]
 costs<-long_run[[2]]
