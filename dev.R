@@ -1,5 +1,4 @@
 relu<-function(Z){
-#  browser()
   A<-pmax(Z,0)
   cache<-Z
   return(list(A,cache))
@@ -28,7 +27,6 @@ fill.matrix<-function(expr,nrow=1,ncol=1){
   matrix(eval(expr,envir=list(x=nrow*ncol)),nrow=nrow,ncol=ncol)
 }
 init_param<-function(layer_dim){
-#  browser()
   L<-length(layer_dim)
   parameters=vector("list",0)
   for (l in 1:(L-1)){
@@ -42,13 +40,11 @@ init_param<-function(layer_dim){
 
 
 for_prop<-function(A,W,b){
-  #browser()
   Z<-sweep((W%*%A),MARGIN=1,STATS=b,FUN="+")
   cache<-list(A,W,b)
   return(list(Z,cache))
 }
 for_activation<-function(A_prev,W,b,activ){
-  #browser()
   if(activ=='sigmoid'){
     calc<-for_prop(A_prev,W,b)
     Z<-calc[[1]]
@@ -71,7 +67,6 @@ for_activation<-function(A_prev,W,b,activ){
 
 
 deep_model<-function(X,parameters){
-  #browser()
   caches<-list()
   A<-X
   L<-length(parameters)%/%2
@@ -105,7 +100,6 @@ cost_computation<-function(AV,Y){
 
 
 back_prop<-function(dZ,cache){
-  browser()
   A_prev<-cache[[1]]
   W<-cache[[2]]
   b<-cache[[3]]
@@ -116,13 +110,12 @@ back_prop<-function(dZ,cache){
   return(list(dA_prev,dW,db))
 }
 back_activ<-function(dA,cache,activ){
-  browser()
   for_cache<-cache[[1]][[1]]
   activ_cache<-cache[[1]][[2]]
   if (activ=='relu'){
-    dZ<-relu_backprop(dA,activ_cache)
+    dZ<-relu_backprop(dA[[1]],activ_cache)
     calc<-back_prop(dZ,for_cache)
-    dA_prev<-calc[[1]]
+    dA_prev<-as.matrix(calc[[1]])
     dW<-calc[[2]]
     db<-calc[[3]]
   } else if (activ=='sigmoid'){
@@ -134,8 +127,7 @@ back_activ<-function(dA,cache,activ){
   }
   return(list(dA_prev,dW,db))
 }
-deep_model_back<-function(AV,Y,caches){ ####Check with more attention this
-  browser()
+deep_model_back<-function(AV,Y,caches){
   grads<-list()
   L<-length(caches)
   m<-dim(AV)[2]
@@ -143,18 +135,18 @@ deep_model_back<-function(AV,Y,caches){ ####Check with more attention this
   dAL=-(Y/AV)-((1-Y)/(1-AV))
   present_cache<-caches[L]
   calc<-back_activ(dAL,present_cache,activ='sigmoid')
-  grads[paste("dA",L,sep="")]<-list(calc[[1]]) ### whats happening here
+  grads[paste("dA",L,sep="")]<-list(calc[[1]])
   grads[paste("dW",L,sep="")]<-list(calc[[2]])
   grads[paste('db',L,sep="")]<-list(calc[[3]])
-  for (l in (L-2):1){
+  for (l in (L-1):1){
     present_cache<-caches[l]
-    calcul<-back_activ(grads[paste("dA",l+1,sep="")],present_cache,activ='relu')
-    dA_prev_temp<-calcul[[1]] #### and here?
+    calcul<-back_activ(grads[paste0("dA",l+1)],present_cache,activ='relu')
+    dA_prev_temp<-calcul[[1]]
     dW_temp<-calcul[[2]]
     db_temp<-calcul[[3]]
-    grads[paste('dA',l,sep="")]<-dA_prev_temp ### and here? somewhere youre getting nulls
-    grads[paste('dW',l,sep="")]<-dW_temp
-    grads[paste('db',l,sep="")]<-db_temp
+    grads[paste0('dA',l)]<-list(dA_prev_temp)
+    grads[paste0('dW',l)]<-list(dW_temp)
+    grads[paste0('db',l)]<-list(db_temp)
   }
   return(grads)
 }
@@ -236,7 +228,7 @@ dense_nn<-function(X,Y,layers_dims,learning_rate=0.0075,num_iterations=5000,prin
     cost<-cost_computation(AV,Y)
     grads<-deep_model_back(AV,Y,caches)
     parameters<-update(parameters,grads,learning_rate)
-    if(print_cost && i%%100==0 | i==num_interations-1){
+    if(print_cost && i%%100==0 | i==num_iterations-1){
       print("Cost after iteration ",i,": ",cost)
     }
     if(i%%100==0 | i==num_iterations){
