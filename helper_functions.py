@@ -39,4 +39,4 @@ def sigmoid_backprop(dA, cache):
     s = 1/(1+np.exp(-Z)) #Derivative of sigmoid function.
     dZ = dA * s * (1-s)
     assert(dZ.shape == Z.shape)
-    return dZ,Z
+    return dZ
