@@ -13,7 +13,7 @@ clean_set<-function(loaded_images){
     if(error_check){loaded_images=loaded_images[-i]})
     tryCatch(if(dim(loaded_images[[i]])[4]==3){ 
       next},error=function(e){error_check<<-TRUE},
-    if(error_check){loaded_images=loaded_images[-i]})
+      if(error_check){loaded_images=loaded_images[-i]})
     tryCatch(if(loaded_images[[i]]==1){
       loaded_images <- loaded_images[-1]
     }, error=function(e){error_check<<-TRUE},
@@ -30,14 +30,14 @@ resize_set<-function(loaded_images,width,height){
 }
 create_dataset<-function(filenames_cat,filenames_dog, labels=c(1,0),width,height){
   loaded_cats<-sapply(filenames_cat,FUN=load,USE.NAMES=TRUE)
-  names(loaded_cats)<-gsub("C:/Users/wtrindad/source/repos/NN_from_scratch/PetLite/","",names(loaded_cats))
+  names(loaded_cats)<-gsub("C:\Users\Willian\Desktop\NN_from_scratch\NN_from_scratch\PetLite","",names(loaded_cats))
   plot(loaded_cats$`Cat/1.jpg`)
   loaded_cats<-clean_set(loaded_cats)
   loaded_cats<-resize_set(loaded_cats,width,height)
   cat_labels<-rep(labels[1],dim(loaded_cats)[2])
   plot(as.cimg(loaded_cats[,2],x=32,y=32,z=1,cc=3))
   loaded_dogs<-sapply(filenames_dog,FUN=load,USE.NAMES=TRUE)
-  names(loaded_dogs)<-gsub("C:/Users/wtrindad/source/repos/NN_from_scratch/PetLite/","",names(loaded_dogs))
+  names(loaded_dogs)<-gsub("C:\Users\Willian\Desktop\NN_from_scratch\NN_from_scratch\PetLite","",names(loaded_dogs))
   plot(loaded_dogs$`Dog/1.jpg`)
   loaded_dogs<-clean_set(loaded_dogs)
   loaded_dogs<-resize_set(loaded_dogs,width=32,height=32)
