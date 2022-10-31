@@ -9,9 +9,15 @@ def deep_model(X,parameters):
     L=len(parameters)//2 #The floor division gives the number of layers in the network
     for l in range(1,L):
         A_prev=A
-        A,cache=for_activation(A_prev,parameters['W'+str(l)],parameters['b'+str(l)],activ='relu')
+        A,cache=for_activation(A_prev,
+                               parameters['W'+str(l)],
+                               parameters['b'+str(l)],
+                               activ='relu')
         caches.append(cache)
-    AV,cache=for_activation(A,parameters['W'+str(L)],parameters['b'+str(L)],activ='sigmoid')
+    AV,cache=for_activation(A,
+                            parameters['W'+str(L)],
+                            parameters['b'+str(L)],
+                            activ='sigmoid')
     caches.append(cache)
     assert(AV.shape==(1,X.shape[1]))
     return AV,caches

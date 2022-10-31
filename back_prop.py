@@ -42,10 +42,14 @@ def deep_model_back(AV,Y,caches):
     Y=Y.reshape(AV.shape)
     dAL=-(np.divide(Y,AV)-np.divide(1-Y,1-AV)) #the derivative of the cost function I talked about in the preamble of this section
     present_cache=caches[L-1]
-    grads["dA"+str(L-1)],grads["dW"+str(L)],grads["db"+str(L)]=back_activ(dAL,present_cache,activ="sigmoid")
+    grads["dA"+str(L-1)],grads["dW"+str(L)],grads["db"+str(L)]=back_activ(dAL,
+                                                                          present_cache,
+                                                                          activ="sigmoid")
     for l in reversed(range(L-1)):
         present_cache=caches[l]
-        dA_prev_temp,dW_temp,db_temp=back_activ(grads['dA'+str(l+1)],present_cache,activ='relu')
+        dA_prev_temp,dW_temp,db_temp=back_activ(grads['dA'+str(l+1)],
+                                                present_cache,
+                                                activ='relu')
         grads['dA'+str(l)]=dA_prev_temp
         grads['dW'+str(l+1)]=dW_temp
         grads['db'+str(l+1)]=db_temp
