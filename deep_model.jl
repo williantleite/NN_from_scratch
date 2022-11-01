@@ -7,21 +7,17 @@ function deep_model(X,parameters)
   for l in 1:L
     if l == L
       A_prev = A
-      calc = for_activation(A_prev,
-                            parameters[string("W", L)],
-                            parameters[string("b", L)],
-                            activ = "sigmoid")
-      AV = calc[1]
-      cache = calc[2]
+      AV, cache = for_activation(A_prev,
+                                 parameters[string("W", L)],
+                                 parameters[string("b", L)],
+                                 activ = "sigmoid")
       push!(caches, cache)
     else
       A_prev = A
-      calc = for_activation(A_prev,
-                            parameters[string("W", l)],
-                            parameters[string("b", l)],
-                            activ = "relu")
-      A = calc[1]
-      cache = calc[2]
+      A, cache = for_activation(A_prev,
+                                parameters[string("W", l)],
+                                parameters[string("b", l)],
+                                activ = "relu")
       push!(caches, cache)
     end
   end
