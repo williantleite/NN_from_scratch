@@ -11,9 +11,10 @@ function dense_nn(X, Y, layers_dims, learning_rate, num_iterations, print_cost)
     cost = cost_computation(AV, Y)
     grads = deep_model_back(AV, Y, caches)
     parameters = update(parameters, grads, learning_rate)
-    if print_cost && i%100==0 || i==num_iterations-1
-      print(string("Cost after iteration ",i,": ",cost))
-    elseif i%100==0 || i==num_iterations
+    if print_cost && i%100==1 || i==num_iterations-1
+      println(string("Cost after iteration ",i,": ",cost))
+    end
+    if i%100==1 || i==num_iterations
       push!(costs, cost)
     end
   end

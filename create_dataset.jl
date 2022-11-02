@@ -1,30 +1,28 @@
-using Images, FileIO, InvertedIndices
+using Images, FileIO, InvertedIndices, Suppressor
 
 function process_image(path_vec::Vector{String}, h::Int64, w::Int64, label::Int64)
   result = zeros((h*w*3), length(path_vec))
   class = Int[]
-  for i in enumerate(path_vec)
-    try
-      img = load(i[2])
-    catch 
-      print("load ")
-      @show i
-      continue
+  @suppress begin
+    for i in enumerate(path_vec) 
+      try
+        img = load(i[2])
+      catch 
+        continue
+      end
+      img = (img === nothing) ? continue : img
+      img = imresize(img,(h,w))
+      img = size(img) == (h, w) ? img : continue
+      img = vec(img)
+      try
+        img = [temp(img[i]) for i = 1:length(img), temp in (red, green, blue)]
+      catch
+        continue
+      end
+      img = reshape(img, ((h*w*3),1))
+      result[:,i[1]] = img
+      push!(class, label)
     end
-    img = (img === nothing) ? continue : img
-    img = imresize(img,(h,w))
-    img = size(img) == (h, w) ? img : continue
-    img = vec(img)
-    try
-      img = [temp(img[i]) for i = 1:length(img), temp in (red, green, blue)]
-    catch
-      print("extract_arrays ")
-      @show i
-      continue
-    end
-    img = reshape(img, ((h*w*3),1))
-    result[:,i[1]] = img
-    push!(class, label)
   end
   return result, class
 end
