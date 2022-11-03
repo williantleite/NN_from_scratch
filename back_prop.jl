@@ -5,9 +5,9 @@ function back_prop(dZ, cache)
   m = size(A_prev)[2]
   dW = (1/m) * dZ * A_prev'
   db = (1/m) * sum(dZ, dims=2)
-  dA_prev = W * dZ
+  dA_prev = W' * dZ
   @assert size(dA_prev) == size(A_prev) "dA_prev size wrong in back_prop function"
-  @assert size(dW) == size(W') "dW size wrong in back_prop function"
+  @assert size(dW) == size(W) "dW size wrong in back_prop function"
   @assert size(db) == size(b) "db size wrong in back_prop function"
   return dA_prev, dW, db
 end
@@ -31,13 +31,13 @@ function deep_model_back(AV, Y, caches)
   Y = reshape(Y, 1, length(AV))
   dAL = -(Y ./ AV) - ((1 .- Y) ./ (1 .- AV))
   present_cache = caches[L]
-  grads[string("dA", L)], grads[string("dW", L)], grads[string("db", L)] = back_activ(dAL, present_cache, "sigmoid")
-  for l in (L - 1):-1:1
-    present_cache = caches[l]
+  grads[string("dA", L-1)], grads[string("dW", L)], grads[string("db", L)] = back_activ(dAL, present_cache, "sigmoid")
+  for l in (L - 2):-1:0
+    present_cache = caches[l+1]
     dA_prev_temp, dW_temp, db_temp = back_activ(grads[string("dA", l+1)], present_cache, "relu")
     grads[string("dA", l)] = dA_prev_temp
-    grads[string("dW", l)] = dW_temp
-    grads[string("db", l)] = db_temp
+    grads[string("dW", l+1)] = dW_temp
+    grads[string("db", l+1)] = db_temp
   end
   return grads
 end

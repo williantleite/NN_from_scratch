@@ -1,8 +1,8 @@
 include("helper_functions.jl")
 
 function for_prop(A, W, b)
-  Z = (W' * A) .+ b
-  @assert size(Z) == (size(W')[1], size(A)[2])
+  Z = (W * A) .+ b
+  @assert size(Z) == (size(W)[1], size(A)[2])
   cache = (A, W, b)
   return Z, cache
 end
@@ -15,7 +15,7 @@ function for_activation(A_prev, W, b, activ)
     Z, linear_cache = for_prop(A_prev, W, b)
     A, activ_cache = relu(Z)
   end
-  @assert size(A) == (size(W')[1], size(A_prev)[2]) "Activation size wrong in for_activation function"
+  @assert size(A) == (size(W)[1], size(A_prev)[2]) "Activation size wrong in for_activation function"
   cache = (linear_cache, activ_cache)
   return A, cache
 end

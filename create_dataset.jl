@@ -10,16 +10,12 @@ function process_image(path_vec::Vector{String}, h::Int64, w::Int64, label::Int6
       catch 
         continue
       end
-      img = (img === nothing) ? continue : img
       img = imresize(img,(h,w))
-      img = size(img) == (h, w) ? img : continue
-      img = vec(img)
       try
-        img = [temp(img[i]) for i = 1:length(img), temp in (red, green, blue)]
+        img = reshape(channelview(img), ((h*w*3), 1)) # [temp(img[i]) for i = 1:length(img), temp in (red, green, blue)]
       catch
         continue
       end
-      img = reshape(img, ((h*w*3),1))
       result[:,i[1]] = img
       push!(class, label)
     end
