@@ -16,6 +16,6 @@ to call the `create_dataset()` function too.
 There are shallow explanations to the different steps in a dense neural network in the [Python notebook](https://github.com/williantleite/NN_from_scratch/blob/main/Python-NN%20from%20Scratch.ipynb). The [R notebook](https://github.com/williantleite/NN_from_scratch/blob/main/R-NN%20from%20Scratch.ipynb) and [Julia notebook](https://github.com/williantleite/NN_from_scratch/blob/main/Julia-NN%20from%20Scratch.ipynb) contain in principle the same code as the python version but adapted to the specific syntax of these languages.
 
 ## Future improvements
-Should I ever have the energy to go back to this project I would like to make a class object in both languages to facilitate using all the different functions and 
+Should I ever have the energy to go back to this project I would like to make a class in both languages to facilitate using all the different functions and 
 retrieving cached information from them. It would be nice to also introduce other optimization algorithms, or new functions like regularization, data augmentation, 
 and convolutional layers.
